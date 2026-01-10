@@ -10,6 +10,7 @@ import { RisksPage } from './components/RisksPage';
 import { AppProvider, useApp } from './context/AppContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AuthPage } from './components/AuthPage';
+import { CustomCursor } from './components/ui/CustomCursor';
 import { Folder, Inbox, Loader2, Users } from 'lucide-react';
 
 // Wrapper to provide context
@@ -111,6 +112,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--depth-0)]">
+      <CustomCursor />
       <AnimatePresence mode="wait">
         {view === 'landing' ? (
           <motion.div

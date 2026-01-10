@@ -67,6 +67,7 @@ body {
   font-size: 15px;
   /* Increased for readability */
   line-height: 1.6;
+  cursor: none;
 }
 
 /* Monospace for data/code */

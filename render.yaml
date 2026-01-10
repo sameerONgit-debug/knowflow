@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: knowflow
+    env: docker
+    plan: free # Change to starter/pro for better performance
+    region: oregon
+    dockerFilePath: Dockerfile
+    dockerContext: .
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false # Set this manually in Render dashboard
+      - key: PORT
+        value: 8000
+    healthCheckPath: /health

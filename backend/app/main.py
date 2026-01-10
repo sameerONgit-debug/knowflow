@@ -18,6 +18,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+import os
 import time
 import logging
 
@@ -160,6 +162,14 @@ AI-powered organizational process intelligence system.
     app.include_router(sessions_router, prefix="/api/v1")
     app.include_router(graphs_router, prefix="/api/v1")
     app.include_router(generation_router, prefix="/api/v1")
+    
+    # Static files (Frontend)
+    # Check if dist directory exists
+    dist_path = os.path.join(os.getcwd(), "dist")
+    if os.path.exists(dist_path):
+        app.mount("/", StaticFiles(directory=dist_path, html=True), name="static")
+    else:
+        logger.warning(f"⚠️ Static dist directory not found at {dist_path}")
     
     return app
 

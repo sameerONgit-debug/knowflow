@@ -92,7 +92,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ---
 
 ## 👥 Meet the Team
-[Add Your Name/Team Info Here]
+- **Sameer**
+- **Kaniksha**
+- **Vikas**
 
 ---
 

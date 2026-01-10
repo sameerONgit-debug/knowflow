@@ -1,0 +1,42 @@
+name: KnowFlow CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    # Frontend Check
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build
+
+    # Backend Check
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    - run: |
+        cd backend
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        # check if backend loads without running
+        python3 -c "from app.main import app; print('Backend loaded successfully')"
+
+    # Docker Build Validation
+    - name: Build Docker Frontend
+      run: docker build -t knowflow-frontend -f Dockerfile.frontend .
+    - name: Build Docker Backend
+      run: docker build -t knowflow-backend -f backend/Dockerfile ./backend

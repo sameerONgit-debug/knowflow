@@ -1,0 +1,20 @@
+# KnowFlow Project Rules
+
+## Core Principles
+1. **Calm Expert Aesthetic**: The UI should feel like a premium engineering tool. No neon, no clutter. Use subtle depth, glassmorphism, and intentional whitespace.
+2. **Deterministic Graphs**: The Backend is the source of truth for the graph state. The Frontend only renders what the backend provides.
+3. **Safety First**: All endpoints must be wrapped in `get_current_user` dependency.
+
+## Frontend Styles
+- Tokens: Use CSS variables from `index.css`.
+- Components: Use `framer-motion` for transitions.
+- Icons: Use `lucide-react`.
+
+## Backend Styles
+- Fast API: Use APIRouter for modularity.
+- Data: Use Pydantic models in `schemas.py`.
+- Logic: Centralize complex logic in `services/`.
+
+## AI Interaction
+- Mock Mode: Always maintain a functional mock mode if the API key is missing.
+- Extraction: The AI must return structured JSON for entities and relationships.

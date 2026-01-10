@@ -1,4 +1,4 @@
-# 👔 KnowFlow: Judges' Demo Guide
+# 👔 KnowFlow: Getting Started & Demo Guide
 
 Welcome to the KnowFlow demonstration. This guide is designed to showcase the platform's ability to solve the "Institutional Memory Leak" problem.
 
@@ -35,7 +35,7 @@ Welcome to the KnowFlow demonstration. This guide is designed to showcase the pl
 
 ---
 
-## 🏗️ Technical Highlights for Judges
+## 🏗️ Technical Highlights
 - **Multi-Tenant Isolation**: All processes are strictly scoped to the authenticated user.
 - **Deterministic state**: The graph is mathematically verified on the backend, not just a drawing on the frontend.
 - **Resilient AI**: System operates flawlessly in Mock Mode if API keys are absent, ensuring a stable demo environment.

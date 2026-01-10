@@ -6,7 +6,7 @@ KnowFlow is an AI-powered process intelligence platform designed to capture team
 
 ---
 
-## 🚀 Hackathon Quick Start
+## 🚀 Quick Start
 
 ### 🐳 The One-Command Deploy (Recommended)
 ```bash
@@ -95,4 +95,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 [Add Your Name/Team Info Here]
 
 ---
-*Built within 24 hours for [Hackathon Name]*
+

@@ -1,0 +1,546 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================================================
+   DESIGN SYSTEM: Engineering Tool Aesthetic
+   - Precise, calm, confident
+   - Reduced glows, tight radii, functional depth
+   ============================================================================= */
+
+:root {
+  /* Depth layers (richer, slightly warmer darks) */
+  --depth-0: #09090b;
+  /* Zinc-950 */
+  --depth-1: #121215;
+  /* Custom darker zinc */
+  --depth-2: #1c1c21;
+  /* Card surface */
+  --depth-3: #27272a;
+  /* Elevating */
+
+  /* Text hierarchy (increased contrast for readability) */
+  --text-primary: #f8fafc;
+  /* Slate-50 */
+  --text-secondary: #94a3b8;
+  /* Slate-400 */
+  --text-tertiary: #64748b;
+  /* Slate-500 */
+  --text-muted: #475569;
+  /* Slate-600 */
+
+  /* Borders (ultra-subtle) */
+  --border-subtle: rgba(255, 255, 255, 0.03);
+  --border-default: rgba(255, 255, 255, 0.06);
+  --border-emphasis: rgba(255, 255, 255, 0.1);
+
+  /* Accent colors (desaturated/professional) */
+  --accent-indigo: #6366f1;
+  --accent-violet: #8b5cf6;
+  --accent-cyan: #06b6d4;
+  --accent-green: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-red: #ef4444;
+
+  /* Glows */
+  --glow-subtle: 0 0 40px rgba(99, 102, 241, 0.03);
+  --glow-accent: 0 0 30px rgba(99, 102, 241, 0.08);
+
+  /* Radii (Professional, not toy-like) */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+}
+
+* {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--depth-0);
+  color: var(--text-primary);
+  font-size: 15px;
+  /* Increased for readability */
+  line-height: 1.6;
+}
+
+/* Monospace for data/code */
+.mono {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-feature-settings: 'liga' 0;
+}
+
+/* =============================================================================
+   SCROLLBAR (Minimal)
+   ============================================================================= */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-emphasis);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =============================================================================
+   GLASS EFFECTS (Simplified)
+   ============================================================================= */
+
+.glass {
+  background: rgba(15, 21, 32, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-panel {
+  background: var(--depth-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+}
+
+.glass-elevated {
+  background: var(--depth-2);
+  border: 1px solid var(--border-emphasis);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* =============================================================================
+   TYPOGRAPHY (Precise)
+   ============================================================================= */
+
+.headline-xl {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.headline-lg {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.headline-md {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.body-base {
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* Text accents (solid, not gradient) */
+.text-accent {
+  color: var(--accent-violet);
+}
+
+.text-accent-cyan {
+  color: var(--accent-cyan);
+}
+
+/* =============================================================================
+   BUTTONS (Tight radii, functional)
+   ============================================================================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 500;
+  font-size: 13px;
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent-indigo);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--accent-indigo);
+  color: white;
+  padding: 8px 14px;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #6366f1;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 14px;
+  border: 1px solid var(--border-default);
+}
+
+.btn-secondary:hover {
+  background: var(--depth-2);
+  color: var(--text-primary);
+  border-color: var(--border-emphasis);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-tertiary);
+  padding: 6px 10px;
+  border: none;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+.btn-lg {
+  font-size: 14px;
+  padding: 10px 18px;
+}
+
+/* =============================================================================
+   CARDS & PANELS (Left accent bar style)
+   ============================================================================= */
+
+.card {
+  background: var(--depth-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.card-accent {
+  background: var(--depth-1);
+  border: 1px solid var(--border-subtle);
+  border-left: 2px solid var(--accent-indigo);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.card-accent-cyan {
+  border-left-color: var(--accent-cyan);
+}
+
+.card-accent-green {
+  border-left-color: var(--accent-green);
+}
+
+.card-accent-amber {
+  border-left-color: var(--accent-amber);
+}
+
+.card-accent-red {
+  border-left-color: var(--accent-red);
+}
+
+/* =============================================================================
+   INPUTS (Minimal)
+   ============================================================================= */
+
+.input {
+  background: var(--depth-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: border-color 0.15s ease;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-indigo);
+}
+
+/* =============================================================================
+   BADGES (Subtle)
+   ============================================================================= */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+}
+
+.badge-indigo {
+  background: rgba(129, 140, 248, 0.15);
+  color: var(--accent-indigo);
+}
+
+.badge-cyan {
+  background: rgba(34, 211, 238, 0.15);
+  color: var(--accent-cyan);
+}
+
+.badge-green {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent-green);
+}
+
+.badge-amber {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--accent-amber);
+}
+
+.badge-red {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--accent-red);
+}
+
+/* =============================================================================
+   DATA ELEMENTS
+   ============================================================================= */
+
+.stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* Confidence indicator via opacity */
+.confidence-high {
+  opacity: 1;
+}
+
+.confidence-medium {
+  opacity: 0.75;
+}
+
+.confidence-low {
+  opacity: 0.5;
+}
+
+/* =============================================================================
+   SIDEBAR
+   ============================================================================= */
+
+.sidebar {
+  width: 240px;
+  background: var(--depth-1);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+}
+
+.sidebar-item.active {
+  background: rgba(129, 140, 248, 0.1);
+  color: var(--text-primary);
+  border-left: 2px solid var(--accent-indigo);
+  margin-left: -2px;
+}
+
+/* =============================================================================
+   COMMAND BAR (Spotlight-style)
+   ============================================================================= */
+
+.command-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--depth-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.command-bar:hover {
+  border-color: var(--border-emphasis);
+  color: var(--text-tertiary);
+}
+
+.command-bar kbd {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  color: var(--text-muted);
+}
+
+/* =============================================================================
+   ANIMATIONS (Fast, functional)
+   ============================================================================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.25s ease-out;
+}
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--depth-1) 25%, var(--depth-2) 50%, var(--depth-1) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* =============================================================================
+   FOCUS STATES (Accessibility)
+   ============================================================================= */
+
+*:focus-visible {
+  outline: 2px solid var(--accent-indigo);
+  outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* =============================================================================
+   UTILITY CLASSES
+   ============================================================================= */
+
+.truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.border-l-accent {
+  border-left: 2px solid var(--accent-indigo);
+}
+
+.bg-depth-0 {
+  background: var(--depth-0);
+}
+
+.bg-depth-1 {
+  background: var(--depth-1);
+}
+
+.bg-depth-2 {
+  background: var(--depth-2);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}

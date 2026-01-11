@@ -68,10 +68,10 @@ class GraphDiffResponse(BaseModel):
     from_version: int
     to_version: int
     summary: str
-    nodes_added: int
-    nodes_removed: int
-    edges_added: int
-    edges_removed: int
+    nodes_added: List[str]
+    nodes_removed: List[str]
+    edges_added: List[str]
+    edges_removed: List[str]
 
 
 # =============================================================================
@@ -222,10 +222,10 @@ async def get_graph_diff(
         from_version=diff.from_version,
         to_version=diff.to_version,
         summary=diff.summary,
-        nodes_added=len(diff.nodes_added),
-        nodes_removed=len(diff.nodes_removed),
-        edges_added=len(diff.edges_added),
-        edges_removed=len(diff.edges_removed)
+        nodes_added=list(diff.nodes_added),
+        nodes_removed=list(diff.nodes_removed),
+        edges_added=list(diff.edges_added),
+        edges_removed=list(diff.edges_removed)
     )
 
 

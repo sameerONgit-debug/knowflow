@@ -147,9 +147,9 @@ export interface GraphEdge {
     source: string;
     target: string;
     type: string;
-    label: string;
+    label: string | null;
     data: {
-        conditions: string[];
+        conditions?: string[];
     };
 }
 
@@ -174,7 +174,7 @@ export interface GraphAnalysis {
     leaves: string[];
     total_nodes: number;
     total_edges: number;
-    centrality: Record<string, number>;
+    top_central_nodes: Record<string, number>;
 }
 
 export interface GraphDiff {

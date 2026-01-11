@@ -283,7 +283,7 @@ export const GraphPage: React.FC = () => {
                                             return (
                                                 <div key={i} className="flex items-center gap-2 text-xs p-1.5 rounded bg-[var(--depth-1)] border border-[var(--border-subtle)]">
                                                     <span className="font-medium text-[var(--text-secondary)]">{sourceNode.label}</span>
-                                                    <span className="text-[10px] text-[var(--text-muted)] px-1">── {edge.relation} ──&gt;</span>
+                                                    <span className="text-[10px] text-[var(--text-muted)] px-1">── {edge.label || edge.type} ──&gt;</span>
                                                     <span className="font-medium text-[var(--text-primary)]">{targetNode.label}</span>
                                                 </div>
                                             );
@@ -318,7 +318,7 @@ export const GraphPage: React.FC = () => {
                                         <h4 className="label mb-2">Entry Points (Roots)</h4>
                                         <div className="flex flex-wrap gap-1">
                                             {analysis.roots.map((root) => {
-                                                const node = graphData?.nodes.find(n => n.id === root);
+                                                const node = graphData?.nodes?.find(n => n.id === root);
                                                 return (
                                                     <span key={root} className="badge badge-green">
                                                         {node?.label || root}
@@ -334,7 +334,7 @@ export const GraphPage: React.FC = () => {
                                         <h4 className="label mb-2">End Points (Leaves)</h4>
                                         <div className="flex flex-wrap gap-1">
                                             {analysis.leaves.map((leaf) => {
-                                                const node = graphData?.nodes.find(n => n.id === leaf);
+                                                const node = graphData?.nodes?.find(n => n.id === leaf);
                                                 return (
                                                     <span key={leaf} className="badge badge-amber">
                                                         {node?.label || leaf}
@@ -346,15 +346,15 @@ export const GraphPage: React.FC = () => {
                                 )}
                             </div>
 
-                            {Object.keys(analysis.centrality).length > 0 && (
+                            {Object.keys(analysis.top_central_nodes).length > 0 && (
                                 <div className="border-t border-[var(--border-subtle)] mt-4 pt-4">
                                     <h4 className="label mb-2">Centrality (Most Connected)</h4>
                                     <div className="flex flex-wrap gap-2">
-                                        {Object.entries(analysis.centrality)
+                                        {Object.entries(analysis.top_central_nodes)
                                             .sort(([, a], [, b]) => b - a)
                                             .slice(0, 5)
                                             .map(([nodeId, score]) => {
-                                                const node = graphData?.nodes.find(n => n.id === nodeId);
+                                                const node = graphData?.nodes?.find(n => n.id === nodeId);
                                                 return (
                                                     <span key={nodeId} className="text-xs">
                                                         <span className="text-[var(--text-primary)]">{node?.label || nodeId}</span>

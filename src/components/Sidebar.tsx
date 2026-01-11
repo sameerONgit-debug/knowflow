@@ -11,7 +11,15 @@ import {
   Plus,
   Search,
   ChevronDown,
+  LogOut,
+  X,
+  Mail,
+  Briefcase,
+  Building,
+  Clock,
+  Hash
 } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { ProcessSelector } from './ProcessSelector';
 
@@ -31,6 +39,7 @@ const sidebarItems = [
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapture }) => {
   const { user, logout } = useAuth();
+  const [showProfile, setShowProfile] = React.useState(false);
 
   const getInitials = (name: string) => {
     return name
@@ -97,15 +106,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapt
         </div>
       </nav>
 
-      {/* User Profile */}
-      <div className="p-3 border-t border-[var(--border-subtle)]">
+      {/* User Profile Footer */}
+      <div className="p-3 border-t border-[var(--border-subtle)] flex items-center gap-2">
         <button
-          onClick={() => {
-            if (window.confirm('Are you sure you want to sign out?')) {
-              logout();
-            }
-          }}
-          className="w-full flex items-center gap-3 p-2 rounded-md hover:bg-[rgba(255,255,255,0.04)] transition-colors group"
+          onClick={() => setShowProfile(true)}
+          className="flex-1 flex items-center gap-3 p-2 rounded-md hover:bg-[rgba(255,255,255,0.04)] transition-colors group text-left min-w-0"
         >
           <div className="relative">
             <div className="w-8 h-8 rounded-md bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium uppercase">
@@ -118,23 +123,112 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapt
               {user?.full_name || user?.username || 'Guest'}
             </p>
             {user ? (
-              <div className="flex flex-col gap-0.5 mt-0.5">
-                <p className="text-[10px] text-[var(--text-muted)] truncate capitalize">
-                  {user.role || 'User'} {user.department && `• ${user.department}`}
-                </p>
-                <p className="text-[9px] text-[var(--text-tertiary)] mono">
-                  ID: {user.employee_id || 'N/A'} • {user.experience_years || 0}y Exp
-                </p>
-              </div>
+              <p className="text-[10px] text-[var(--text-muted)] truncate capitalize">
+                View Profile
+              </p>
             ) : (
               <p className="text-[10px] text-[var(--text-muted)] truncate capitalize">
                 Exploring
               </p>
             )}
           </div>
-          <ChevronDown className="w-3 h-3 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors" />
+        </button>
+
+        <button
+          onClick={() => {
+            if (window.confirm('Are you sure you want to sign out?')) {
+              logout();
+            }
+          }}
+          className="p-2 rounded-md hover:bg-red-500/10 text-[var(--text-muted)] hover:text-red-400 transition-colors"
+          title="Sign Out"
+        >
+          <LogOut className="w-4 h-4" />
         </button>
       </div>
+
+      {/* Profile Modal */}
+      <AnimatePresence>
+        {showProfile && user && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            onClick={() => setShowProfile(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-[var(--depth-1)] border border-[var(--border-default)] rounded-xl shadow-2xl w-full max-w-sm overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="px-6 py-4 border-b border-[var(--border-subtle)] flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-[var(--text-primary)]">User Profile</h3>
+                <button onClick={() => setShowProfile(false)} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold uppercase shadow-lg">
+                    {getInitials(user.full_name || user.username)}
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-medium text-[var(--text-primary)]">{user.full_name}</h4>
+                    <p className="text-sm text-[var(--text-muted)]">@{user.username}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
+                    <Mail className="w-4 h-4 text-[var(--text-tertiary)]" />
+                    <div className="flex-1">
+                      <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Email</p>
+                      <p className="text-[var(--text-secondary)]">{user.email}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex items-center gap-2 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
+                      <Hash className="w-4 h-4 text-[var(--text-tertiary)]" />
+                      <div className="min-w-0">
+                        <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">ID</p>
+                        <p className="text-[var(--text-secondary)] truncate">{user.employee_id || 'N/A'}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
+                      <Clock className="w-4 h-4 text-[var(--text-tertiary)]" />
+                      <div className="min-w-0">
+                        <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Exp</p>
+                        <p className="text-[var(--text-secondary)] truncate">{user.experience_years || 0} Years</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
+                    <Briefcase className="w-4 h-4 text-[var(--text-tertiary)]" />
+                    <div className="flex-1">
+                      <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Role</p>
+                      <p className="text-[var(--text-secondary)]">{user.role || 'Unspecified'}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
+                    <Building className="w-4 h-4 text-[var(--text-tertiary)]" />
+                    <div className="flex-1">
+                      <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Department</p>
+                      <p className="text-[var(--text-secondary)]">{user.department || 'Unspecified'}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.aside>
   );
 };

@@ -23,11 +23,12 @@ const AppContent: React.FC = () => {
 
   // Handle initial auth state
   React.useEffect(() => {
-    if (!authLoading && isAuthenticated && view === 'landing') {
-      // Optional: Auto-redirect to dashboard if logged in?
-      // For now, let landing page handle it via "Get Started" or "Go to Dashboard"
+    if (!authLoading) {
+      if (!isAuthenticated && (view === 'dashboard' || view === 'session')) {
+        setView('landing');
+      }
     }
-  }, [authLoading, isAuthenticated]);
+  }, [authLoading, isAuthenticated, view]);
 
   const handleGetStarted = () => {
     if (isAuthenticated) {

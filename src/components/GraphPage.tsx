@@ -215,10 +215,10 @@ export const GraphPage: React.FC = () => {
                             {/* Swimlanes */}
                             <div className="flex-1 grid grid-cols-4 gap-4 p-4 bg-[var(--depth-1)] overflow-x-auto">
                                 {[
-                                    { title: 'Inputs & Sources', types: ['trigger', 'resource'], color: 'var(--accent-green)' },
+                                    { title: 'Inputs & Sources', types: ['trigger', 'artifact', 'system'], color: 'var(--accent-green)' },
                                     { title: 'Roles & Actors', types: ['role'], color: 'var(--accent-cyan)' },
                                     { title: 'Tasks & Workflow', types: ['task'], color: 'var(--accent-indigo)' },
-                                    { title: 'Decisions & Logic', types: ['decision', 'condition'], color: 'var(--accent-amber)' },
+                                    { title: 'Decisions & Logic', types: ['decision', 'rule'], color: 'var(--accent-amber)' },
                                 ].map((lane) => {
                                     const laneNodes = graphData.nodes.filter(n => lane.types.includes(n.type));
                                     return (

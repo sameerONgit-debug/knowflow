@@ -59,7 +59,7 @@ class EntityProcessor:
         Returns None if validation fails.
         """
         try:
-            entity_type = EntityType(extracted.entity_type)
+            entity_type = EntityType(extracted.entity_type.lower())
         except ValueError:
             return None
         
@@ -102,7 +102,7 @@ class RelationProcessor:
         Create a validated GraphEdge from AI extraction result.
         """
         try:
-            relation_type = RelationType(extracted.relation_type)
+            relation_type = RelationType(extracted.relation_type.lower())
         except ValueError:
             return None
         

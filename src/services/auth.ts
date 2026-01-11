@@ -4,7 +4,22 @@ export interface User {
     id: string;
     username: string;
     full_name?: string;
-    email?: string;
+    email: string;
+    employee_id: string;
+    role: string;
+    department: string;
+    experience_years: number;
+}
+
+export interface RegisterData {
+    username: string;
+    password: string;
+    full_name?: string;
+    email: string;
+    employee_id: string;
+    role: string;
+    department: string;
+    experience_years: number;
 }
 
 export interface AuthResponse {
@@ -23,12 +38,8 @@ export const authApi = {
         return response.data!;
     },
 
-    register: async (username: string, password: string, fullName?: string): Promise<User> => {
-        const response = await request<User>('POST', '/auth/register', {
-            username,
-            password,
-            full_name: fullName
-        });
+    register: async (data: RegisterData): Promise<User> => {
+        const response = await request<User>('POST', '/auth/register', data);
         if (response.error) {
             throw new Error(response.error);
         }

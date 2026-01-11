@@ -117,9 +117,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapt
             <p className="text-xs font-medium text-[var(--text-primary)] truncate">
               {user?.full_name || user?.username || 'Guest'}
             </p>
-            <p className="text-[10px] text-[var(--text-muted)] truncate capitalize">
-              {user ? 'Process Owner' : 'Exploring'}
-            </p>
+            {user ? (
+              <div className="flex flex-col gap-0.5 mt-0.5">
+                <p className="text-[10px] text-[var(--text-muted)] truncate capitalize">
+                  {user.role || 'User'} {user.department && `• ${user.department}`}
+                </p>
+                <p className="text-[9px] text-[var(--text-tertiary)] mono">
+                  ID: {user.employee_id || 'N/A'} • {user.experience_years || 0}y Exp
+                </p>
+              </div>
+            ) : (
+              <p className="text-[10px] text-[var(--text-muted)] truncate capitalize">
+                Exploring
+              </p>
+            )}
           </div>
           <ChevronDown className="w-3 h-3 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors" />
         </button>

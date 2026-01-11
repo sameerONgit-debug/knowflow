@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { Loader2, ArrowRight, Lock, User, Mail } from 'lucide-react';
+import { Loader2, ArrowRight, Lock, User, Mail, Briefcase, Building, Clock, Hash } from 'lucide-react';
 
 interface AuthPageProps {
     onComplete: () => void;
@@ -16,6 +16,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onComplete }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [employeeId, setEmployeeId] = useState('');
+    const [role, setRole] = useState('');
+    const [department, setDepartment] = useState('');
+    const [experienceYears, setExperienceYears] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -30,7 +35,16 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onComplete }) => {
             if (isLogin) {
                 await login(username, password);
             } else {
-                await register(username, password, fullName);
+                await register({
+                    username,
+                    password,
+                    full_name: fullName,
+                    email,
+                    employee_id: employeeId,
+                    role,
+                    department,
+                    experience_years: parseFloat(experienceYears) || 0
+                });
             }
             onComplete();
         } catch (err: any) {
@@ -81,12 +95,64 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onComplete }) => {
                                     className="space-y-2 overflow-hidden"
                                 >
                                     <div className="relative">
-                                        <Mail className="absolute left-3 top-2.5 w-4 h-4 text-[var(--text-muted)]" />
+                                        <Hash className="absolute left-3 top-2.5 w-4 h-4 text-[var(--text-muted)]" />
                                         <input
                                             type="text"
-                                            placeholder="Full Name (Optional)"
+                                            placeholder="Employee ID"
+                                            value={employeeId}
+                                            onChange={(e) => setEmployeeId(e.target.value)}
+                                            className="w-full bg-[var(--depth-1)] border border-[var(--border-subtle)] rounded-lg py-2 pl-10 pr-4 text-sm text-[var(--text-primary)] focus:outline-none focus:border-blue-500/50 transition-colors placeholder-[var(--text-muted)]"
+                                        />
+                                    </div>
+                                    <div className="relative">
+                                        <User className="absolute left-3 top-2.5 w-4 h-4 text-[var(--text-muted)]" />
+                                        <input
+                                            type="text"
+                                            placeholder="Full Name"
                                             value={fullName}
                                             onChange={(e) => setFullName(e.target.value)}
+                                            className="w-full bg-[var(--depth-1)] border border-[var(--border-subtle)] rounded-lg py-2 pl-10 pr-4 text-sm text-[var(--text-primary)] focus:outline-none focus:border-blue-500/50 transition-colors placeholder-[var(--text-muted)]"
+                                        />
+                                    </div>
+                                    <div className="relative">
+                                        <Mail className="absolute left-3 top-2.5 w-4 h-4 text-[var(--text-muted)]" />
+                                        <input
+                                            type="email"
+                                            placeholder="Email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            className="w-full bg-[var(--depth-1)] border border-[var(--border-subtle)] rounded-lg py-2 pl-10 pr-4 text-sm text-[var(--text-primary)] focus:outline-none focus:border-blue-500/50 transition-colors placeholder-[var(--text-muted)]"
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="relative">
+                                            <Briefcase className="absolute left-3 top-2.5 w-4 h-4 text-[var(--text-muted)]" />
+                                            <input
+                                                type="text"
+                                                placeholder="Role"
+                                                value={role}
+                                                onChange={(e) => setRole(e.target.value)}
+                                                className="w-full bg-[var(--depth-1)] border border-[var(--border-subtle)] rounded-lg py-2 pl-10 pr-4 text-sm text-[var(--text-primary)] focus:outline-none focus:border-blue-500/50 transition-colors placeholder-[var(--text-muted)]"
+                                            />
+                                        </div>
+                                        <div className="relative">
+                                            <Building className="absolute left-3 top-2.5 w-4 h-4 text-[var(--text-muted)]" />
+                                            <input
+                                                type="text"
+                                                placeholder="Dept"
+                                                value={department}
+                                                onChange={(e) => setDepartment(e.target.value)}
+                                                className="w-full bg-[var(--depth-1)] border border-[var(--border-subtle)] rounded-lg py-2 pl-10 pr-4 text-sm text-[var(--text-primary)] focus:outline-none focus:border-blue-500/50 transition-colors placeholder-[var(--text-muted)]"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="relative">
+                                        <Clock className="absolute left-3 top-2.5 w-4 h-4 text-[var(--text-muted)]" />
+                                        <input
+                                            type="number"
+                                            placeholder="Experience (Years)"
+                                            value={experienceYears}
+                                            onChange={(e) => setExperienceYears(e.target.value)}
                                             className="w-full bg-[var(--depth-1)] border border-[var(--border-subtle)] rounded-lg py-2 pl-10 pr-4 text-sm text-[var(--text-primary)] focus:outline-none focus:border-blue-500/50 transition-colors placeholder-[var(--text-muted)]"
                                         />
                                     </div>

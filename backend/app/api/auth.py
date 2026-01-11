@@ -18,6 +18,11 @@ class RegisterRequest(BaseModel):
     username: str
     password: str
     full_name: str = None
+    email: str
+    employee_id: str
+    role: str
+    department: str
+    experience_years: float
 
 @router.post("/token", response_model=Token)
 async def login(data: LoginRequest):
@@ -40,7 +45,16 @@ async def login(data: LoginRequest):
 @router.post("/register", response_model=User)
 async def register(data: RegisterRequest):
     """Register a new user account."""
-    return register_user(data.username, data.password, data.full_name)
+    return register_user(
+        username=data.username, 
+        password=data.password, 
+        email=data.email,
+        employee_id=data.employee_id,
+        role=data.role,
+        department=data.department,
+        experience_years=data.experience_years,
+        full_name=data.full_name
+    )
 
 @router.get("/me", response_model=User)
 async def read_users_me(current_user: User = Depends(get_current_user)):

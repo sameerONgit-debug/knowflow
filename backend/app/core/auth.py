@@ -52,7 +52,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
         )
     return user
 
-def register_user(username: str, password: str, full_name: str = None) -> User:
+def register_user(username: str, password: str, email: str, employee_id: str, role: str, department: str, experience_years: float, full_name: str = None) -> User:
     if username in users_db:
         raise HTTPException(status_code=400, detail="Username already registered")
     
@@ -60,7 +60,12 @@ def register_user(username: str, password: str, full_name: str = None) -> User:
     new_user = User(
         username=username,
         hashed_password=hashed,
-        full_name=full_name
+        full_name=full_name,
+        email=email,
+        employee_id=employee_id,
+        role=role,
+        department=department,
+        experience_years=experience_years
     )
     users_db[username] = new_user
     return new_user

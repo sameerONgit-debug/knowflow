@@ -93,7 +93,11 @@ class User(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     username: str = Field(..., min_length=3, max_length=50)
     full_name: Optional[str] = None
-    email: Optional[str] = None
+    email: str  # Made mandatory
+    employee_id: str
+    role: str
+    department: str
+    experience_years: float
     hashed_password: str
     is_active: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)

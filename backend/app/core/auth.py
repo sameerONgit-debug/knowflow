@@ -11,7 +11,7 @@ from uuid import UUID
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from app.models.schemas import User
+from app.models.schemas import User, UserUpdate
 
 # IN-MEMORY STORAGE
 users_db: Dict[str, User] = {}  # username -> User
@@ -69,3 +69,15 @@ def register_user(username: str, password: str, email: str, employee_id: str, ro
     )
     users_db[username] = new_user
     return new_user
+
+def update_user_profile(username: str, updates: UserUpdate) -> User:
+    user = users_db.get(username)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Update fields that are set
+    update_data = updates.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(user, key, value)
+        
+    return user

@@ -102,6 +102,15 @@ class User(BaseModel):
     is_active: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
+class UserUpdate(BaseModel):
+    """Payload for updating user profile."""
+    full_name: Optional[str] = None
+    email: Optional[str] = None
+    employee_id: Optional[str] = None
+    role: Optional[str] = None
+    department: Optional[str] = None
+    experience_years: Optional[float] = None
+
 class Token(BaseModel):
     """API Access Token."""
     access_token: str

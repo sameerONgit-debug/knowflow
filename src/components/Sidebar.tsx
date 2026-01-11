@@ -17,7 +17,10 @@ import {
   Briefcase,
   Building,
   Clock,
-  Hash
+  Hash,
+  Pencil,
+  Check,
+  Loader2
 } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -38,8 +41,47 @@ const sidebarItems = [
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapture }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, updateProfile } = useAuth();
   const [showProfile, setShowProfile] = React.useState(false);
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editForm, setEditForm] = React.useState<any>({});
+  const [isSaving, setIsSaving] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!showProfile) {
+      setIsEditing(false);
+      setEditForm({});
+    }
+  }, [showProfile]);
+
+  const handleStartEdit = () => {
+    if (!user) return;
+    setEditForm({
+      full_name: user.full_name || '',
+      email: user.email || '',
+      employee_id: user.employee_id || '',
+      role: user.role || '',
+      department: user.department || '',
+      experience_years: user.experience_years || 0
+    });
+    setIsEditing(true);
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await updateProfile({
+        ...editForm,
+        experience_years: Number(editForm.experience_years) || 0
+      });
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      alert('Failed to update profile');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const getInitials = (name: string) => {
     return name
@@ -165,7 +207,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapt
               onClick={(e) => e.stopPropagation()}
             >
               <div className="px-6 py-4 border-b border-[var(--border-subtle)] flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-[var(--text-primary)]">User Profile</h3>
+                <div className="flex items-center gap-3">
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)]">User Profile</h3>
+                  {!isEditing && (
+                    <button
+                      onClick={handleStartEdit}
+                      className="p-1 rounded hover:bg-[var(--depth-2)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+                      title="Edit Profile"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
                 <button onClick={() => setShowProfile(false)} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
                   <X className="w-4 h-4" />
                 </button>
@@ -176,8 +229,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapt
                   <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold uppercase shadow-lg">
                     {getInitials(user.full_name || user.username)}
                   </div>
-                  <div>
-                    <h4 className="text-lg font-medium text-[var(--text-primary)]">{user.full_name}</h4>
+                  <div className="flex-1">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={editForm.full_name}
+                        onChange={e => setEditForm({ ...editForm, full_name: e.target.value })}
+                        className="w-full bg-[var(--depth-2)] border border-[var(--border-subtle)] rounded px-2 py-1 text-sm text-[var(--text-primary)] mb-1"
+                        placeholder="Full Name"
+                      />
+                    ) : (
+                      <h4 className="text-lg font-medium text-[var(--text-primary)]">{user.full_name}</h4>
+                    )}
                     <p className="text-sm text-[var(--text-muted)]">@{user.username}</p>
                   </div>
                 </div>
@@ -185,45 +248,110 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapt
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
                     <Mail className="w-4 h-4 text-[var(--text-tertiary)]" />
-                    <div className="flex-1">
+                    <div className="flex-1 w-full">
                       <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Email</p>
-                      <p className="text-[var(--text-secondary)]">{user.email}</p>
+                      {isEditing ? (
+                        <input
+                          type="email"
+                          value={editForm.email}
+                          onChange={e => setEditForm({ ...editForm, email: e.target.value })}
+                          className="w-full bg-transparent border-b border-[var(--border-subtle)] text-[var(--text-secondary)] focus:outline-none focus:border-blue-500"
+                        />
+                      ) : (
+                        <p className="text-[var(--text-secondary)]">{user.email}</p>
+                      )}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex items-center gap-2 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
                       <Hash className="w-4 h-4 text-[var(--text-tertiary)]" />
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">ID</p>
-                        <p className="text-[var(--text-secondary)] truncate">{user.employee_id || 'N/A'}</p>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            value={editForm.employee_id}
+                            onChange={e => setEditForm({ ...editForm, employee_id: e.target.value })}
+                            className="w-full bg-transparent border-b border-[var(--border-subtle)] text-[var(--text-secondary)] focus:outline-none focus:border-blue-500"
+                          />
+                        ) : (
+                          <p className="text-[var(--text-secondary)] truncate">{user.employee_id || 'N/A'}</p>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center gap-2 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
                       <Clock className="w-4 h-4 text-[var(--text-tertiary)]" />
-                      <div className="min-w-0">
-                        <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Exp</p>
-                        <p className="text-[var(--text-secondary)] truncate">{user.experience_years || 0} Years</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Exp (Yrs)</p>
+                        {isEditing ? (
+                          <input
+                            type="number"
+                            value={editForm.experience_years}
+                            onChange={e => setEditForm({ ...editForm, experience_years: e.target.value })}
+                            className="w-full bg-transparent border-b border-[var(--border-subtle)] text-[var(--text-secondary)] focus:outline-none focus:border-blue-500"
+                          />
+                        ) : (
+                          <p className="text-[var(--text-secondary)] truncate">{user.experience_years || 0} Years</p>
+                        )}
                       </div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
                     <Briefcase className="w-4 h-4 text-[var(--text-tertiary)]" />
-                    <div className="flex-1">
+                    <div className="flex-1 w-full">
                       <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Role</p>
-                      <p className="text-[var(--text-secondary)]">{user.role || 'Unspecified'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.role}
+                          onChange={e => setEditForm({ ...editForm, role: e.target.value })}
+                          className="w-full bg-transparent border-b border-[var(--border-subtle)] text-[var(--text-secondary)] focus:outline-none focus:border-blue-500"
+                        />
+                      ) : (
+                        <p className="text-[var(--text-secondary)]">{user.role || 'Unspecified'}</p>
+                      )}
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3 text-sm p-2 rounded bg-[var(--depth-2)] border border-[var(--border-subtle)]">
                     <Building className="w-4 h-4 text-[var(--text-tertiary)]" />
-                    <div className="flex-1">
+                    <div className="flex-1 w-full">
                       <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Department</p>
-                      <p className="text-[var(--text-secondary)]">{user.department || 'Unspecified'}</p>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editForm.department}
+                          onChange={e => setEditForm({ ...editForm, department: e.target.value })}
+                          className="w-full bg-transparent border-b border-[var(--border-subtle)] text-[var(--text-secondary)] focus:outline-none focus:border-blue-500"
+                        />
+                      ) : (
+                        <p className="text-[var(--text-secondary)]">{user.department || 'Unspecified'}</p>
+                      )}
                     </div>
                   </div>
                 </div>
+
+                {isEditing && (
+                  <div className="flex items-center gap-3 pt-2">
+                    <button
+                      onClick={handleSave}
+                      disabled={isSaving}
+                      className="flex-1 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                    >
+                      {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                      Save Changes
+                    </button>
+                    <button
+                      onClick={() => setIsEditing(false)}
+                      disabled={isSaving}
+                      className="px-4 py-2 bg-[var(--depth-3)] hover:bg-[var(--depth-2)] text-[var(--text-primary)] rounded-md text-sm font-medium transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
               </div>
             </motion.div>
           </motion.div>

@@ -22,6 +22,15 @@ export interface RegisterData {
     experience_years: number;
 }
 
+export interface UserUpdateData {
+    full_name?: string;
+    email?: string;
+    employee_id?: string;
+    role?: string;
+    department?: string;
+    experience_years?: number;
+}
+
 export interface AuthResponse {
     access_token: string;
     token_type: string;
@@ -48,6 +57,14 @@ export const authApi = {
 
     getMe: async (): Promise<User> => {
         const response = await request<User>('GET', '/auth/me');
+        if (response.error) {
+            throw new Error(response.error);
+        }
+        return response.data!;
+    },
+
+    updateProfile: async (data: UserUpdateData): Promise<User> => {
+        const response = await request<User>('PATCH', '/auth/me', data);
         if (response.error) {
             throw new Error(response.error);
         }

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, authApi, RegisterData } from '../services/auth';
+import { User, authApi, RegisterData, UserUpdateData } from '../services/auth';
 
 interface AuthContextType {
     user: User | null;
@@ -7,6 +7,7 @@ interface AuthContextType {
     isLoading: boolean;
     login: (username: string, password: string) => Promise<void>;
     register: (data: RegisterData) => Promise<void>;
+    updateProfile: (data: UserUpdateData) => Promise<void>;
     logout: () => void;
 }
 
@@ -58,6 +59,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
+    const updateProfile = async (data: UserUpdateData) => {
+        setIsLoading(true);
+        try {
+            const updatedUser = await authApi.updateProfile(data);
+            setUser(updatedUser);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem('access_token');
         setUser(null);
@@ -70,6 +81,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             isLoading,
             login,
             register,
+            updateProfile,
             logout
         }}>
             {children}

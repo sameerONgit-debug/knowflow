@@ -18,8 +18,74 @@ from app.models import EntityType, RelationType, ConfidenceLevel
 
 
 # =============================================================================
-# CONFIGURATION
+# SCHEMAS FOR STRUCTURED OUTPUT
 # =============================================================================
+
+class ExtractedEntity(BaseModel):
+    name: str
+    entity_type: str
+    confidence: float
+    description: str
+    source_quote: str
+    attributes: Dict[str, Any] = {}
+
+class ExtractedRelation(BaseModel):
+    source_entity: str
+    target_entity: str
+    relation_type: str
+    confidence: float
+    label: Optional[str] = None
+    conditions: List[str] = []
+
+class ExtractionResult(BaseModel):
+    entities: List[ExtractedEntity]
+    relations: List[ExtractedRelation]
+    summary: str
+    ambiguities: List[str] = []
+    followup_suggestions: List[str] = []
+
+class QuestionGenerationResult(BaseModel):
+    question_text: str
+    intent: str
+    target_entity_type: Optional[str] = None
+    priority: float
+    is_followup: bool
+    reasoning: str
+
+# =============================================================================
+# PROMPT TEMPLATES
+# =============================================================================
+
+EXTRACTION_SYSTEM_PROMPT = """
+You are an expert Knowledge Extraction AI. Your task is to extract structured knowledge from user responses about business processes.
+Identify:
+1. Entities: tasks, roles, triggers, decisions, artifacts, systems, rules.
+2. Relationships: depends_on, triggers, owned_by, produces, consumes, decides, escalates_to, validates.
+
+Return a JSON object following the schema.
+"""
+
+QUESTION_GENERATION_PROMPT = """
+You are an adaptive process documentation interviewer. Your goal is to guide the user to describe their business process completely.
+Current Phase: {session_phase}
+Process Name: {process_name}
+Known Knowledge: {known_summary}
+Identified Gaps: {gaps}
+Previous Questions: {prev_questions}
+Last Response: {last_response}
+
+Generate the next question to fill the most important knowledge gap.
+Return a JSON object following the schema.
+"""
+
+RISK_ANALYSIS_PROMPT = """
+You are a Process Risk Analyst. Analyze the following process graph for risks:
+Nodes: {nodes}
+Edges: {edges}
+
+Identify risks like: Single Point of Failure, Undocumented Decision, Orphaned Task, Brittle Chain, Circular Dependency, Bottleneck.
+Return a JSON list of risk findings.
+"""
 
 # =============================================================================
 # CONFIGURATION

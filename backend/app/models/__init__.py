@@ -9,6 +9,10 @@ from .schemas import (
     RiskCategory,
     ConfidenceLevel,
     
+    # Auth models
+    User,
+    Token,
+    
     # Core entities
     Process,
     Session,
@@ -43,6 +47,8 @@ __all__ = [
     "RiskSeverity",
     "RiskCategory",
     "ConfidenceLevel",
+    "User",
+    "Token",
     "Process",
     "Session",
     "Question",

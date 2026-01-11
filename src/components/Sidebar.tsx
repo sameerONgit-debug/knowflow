@@ -12,6 +12,7 @@ import {
   Search,
   ChevronDown,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { ProcessSelector } from './ProcessSelector';
 
 interface SidebarProps {
@@ -29,6 +30,16 @@ const sidebarItems = [
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapture }) => {
+  const { user, logout } = useAuth();
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
+  };
+
   return (
     <motion.aside
       initial={{ opacity: 0, x: -20 }}
@@ -73,8 +84,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapt
               key={item.id}
               onClick={() => onTabChange(item.id)}
               className={`w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === item.id
-                  ? 'bg-[rgba(129,140,248,0.1)] text-[var(--accent-indigo)]'
-                  : 'text-[var(--text-secondary)] hover:bg-[rgba(255,255,255,0.04)] hover:text-[var(--text-primary)]'
+                ? 'bg-[rgba(129,140,248,0.1)] text-[var(--accent-indigo)]'
+                : 'text-[var(--text-secondary)] hover:bg-[rgba(255,255,255,0.04)] hover:text-[var(--text-primary)]'
                 }`}
             >
               <span className={activeTab === item.id ? 'text-[var(--accent-indigo)]' : 'text-[var(--text-muted)]'}>
@@ -88,18 +99,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onCapt
 
       {/* User Profile */}
       <div className="p-3 border-t border-[var(--border-subtle)]">
-        <button className="w-full flex items-center gap-3 p-2 rounded-md hover:bg-[rgba(255,255,255,0.04)] transition-colors">
+        <button
+          onClick={() => {
+            if (window.confirm('Are you sure you want to sign out?')) {
+              logout();
+            }
+          }}
+          className="w-full flex items-center gap-3 p-2 rounded-md hover:bg-[rgba(255,255,255,0.04)] transition-colors group"
+        >
           <div className="relative">
-            <div className="w-8 h-8 rounded-md bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center text-white text-xs font-medium">
-              SC
+            <div className="w-8 h-8 rounded-md bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium uppercase">
+              {user ? getInitials(user.full_name || user.username) : '??'}
             </div>
             <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[var(--accent-green)] rounded-full border-2 border-[var(--depth-1)]" />
           </div>
           <div className="flex-1 text-left min-w-0">
-            <p className="text-xs font-medium text-[var(--text-primary)] truncate">Sarah Chen</p>
-            <p className="text-[10px] text-[var(--text-muted)] truncate">Admin</p>
+            <p className="text-xs font-medium text-[var(--text-primary)] truncate">
+              {user?.full_name || user?.username || 'Guest'}
+            </p>
+            <p className="text-[10px] text-[var(--text-muted)] truncate capitalize">
+              {user ? 'Process Owner' : 'Exploring'}
+            </p>
           </div>
-          <ChevronDown className="w-3 h-3 text-[var(--text-muted)]" />
+          <ChevronDown className="w-3 h-3 text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors" />
         </button>
       </div>
     </motion.aside>

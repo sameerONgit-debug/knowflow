@@ -47,8 +47,8 @@ export async function request<T>(
 export interface Process {
     id: string;
     name: string;
-    description: string;
-    department: string;
+    description: string | null;
+    department: string | null;
     status: string;
     current_graph_version: number;
     created_at: string;
@@ -57,8 +57,8 @@ export interface Process {
 
 export interface CreateProcessRequest {
     name: string;
-    description?: string;
-    department?: string;
+    description?: string | null;
+    department?: string | null;
 }
 
 export const processesApi = {
@@ -215,7 +215,7 @@ export interface SOPStep {
 export interface SOPVersion {
     id: string;
     process_id: string;
-    version: number;
+    version_number: number;
     title: string;
     purpose: string;
     scope: string;
@@ -248,8 +248,8 @@ export interface RiskFinding {
     recommendation: string;
     affected_node_ids: string[];
     effort_estimate: string;
-    is_acknowledged: boolean;
-    is_resolved: boolean;
+    acknowledged: boolean;
+    resolved: boolean;
     created_at: string;
 }
 
@@ -267,7 +267,7 @@ export const risksApi = {
     analyze: (processId: string, options?: { categories?: string[]; min_severity?: string }) =>
         request<RiskAnalysisResult>('POST', `/processes/${processId}/risks/analyze`, options || {}),
     get: (processId: string) =>
-        request<RiskFinding[]>('GET', `/processes/${processId}/risks`),
+        request<RiskAnalysisResult>('GET', `/processes/${processId}/risks`),
     acknowledge: (processId: string, riskId: string) =>
         request<RiskFinding>('PATCH', `/processes/${processId}/risks/${riskId}/acknowledge`),
     resolve: (processId: string, riskId: string, resolution_notes: string) =>

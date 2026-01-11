@@ -126,7 +126,7 @@ export const SOPPage: React.FC = () => {
                                         onClick={() => setShowVersions(!showVersions)}
                                         className="flex items-center gap-2 px-3 py-1.5 bg-[var(--depth-2)] border border-[var(--border-default)] rounded-md text-xs"
                                     >
-                                        <span className="mono">v{sop.version}</span>
+                                        <span className="mono">v{sop.version_number}</span>
                                         <ChevronDown className="w-3 h-3 text-[var(--text-muted)]" />
                                     </button>
                                     {showVersions && versions.length > 0 && (
@@ -135,10 +135,10 @@ export const SOPPage: React.FC = () => {
                                             <div className="absolute top-full right-0 mt-1 w-48 bg-[var(--depth-2)] border border-[var(--border-default)] rounded-lg shadow-xl z-50 py-1">
                                                 {versions.map((v) => (
                                                     <button
-                                                        key={v.version}
+                                                        key={v.version_number}
                                                         className="w-full px-3 py-2 text-left text-xs hover:bg-[rgba(255,255,255,0.04)] transition-colors"
                                                     >
-                                                        <span className="mono">v{v.version}</span>
+                                                        <span className="mono">v{v.version_number}</span>
                                                         <span className="text-[var(--text-muted)] ml-2">
                                                             {new Date(v.generated_at).toLocaleDateString()}
                                                         </span>

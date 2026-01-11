@@ -37,17 +37,8 @@ export const RisksPage: React.FC = () => {
 
         const result = await risksApi.get(currentProcess.id);
         if (result.data) {
-            setRisks(result.data);
-            // Construct approximate analysis result from list
-            setAnalysisResult({
-                process_id: currentProcess.id,
-                total_risks: result.data.length,
-                critical: result.data.filter(r => r.severity === 'critical').length,
-                high: result.data.filter(r => r.severity === 'high').length,
-                medium: result.data.filter(r => r.severity === 'medium').length,
-                low: result.data.filter(r => r.severity === 'low').length,
-                findings: result.data,
-            });
+            setRisks(result.data.findings);
+            setAnalysisResult(result.data);
         } else {
             setError(result.error);
         }
@@ -83,7 +74,7 @@ export const RisksPage: React.FC = () => {
         const result = await risksApi.acknowledge(currentProcess.id, id);
         if (result.data) {
             // Update local state
-            setRisks(prev => prev.map(r => r.id === id ? { ...r, is_acknowledged: true } : r));
+            setRisks(prev => prev.map(r => r.id === id ? { ...r, acknowledged: true } : r));
         }
     };
 
@@ -92,7 +83,7 @@ export const RisksPage: React.FC = () => {
 
         const result = await risksApi.resolve(currentProcess.id, id, resolutionNotes);
         if (result.data) {
-            setRisks(prev => prev.map(r => r.id === id ? { ...r, is_resolved: true } : r));
+            setRisks(prev => prev.map(r => r.id === id ? { ...r, resolved: true } : r));
             setResolvingId(null);
             setResolutionNotes('');
         }
@@ -178,7 +169,7 @@ export const RisksPage: React.FC = () => {
                     <div className="card">
                         <p className="stat-label mb-1 text-[var(--text-muted)]">Resolved</p>
                         <p className="stat-value text-[var(--text-muted)]">
-                            {risks.filter(r => r.is_resolved).length}
+                            {risks.filter(r => r.resolved).length}
                         </p>
                     </div>
                 </div>
@@ -192,7 +183,7 @@ export const RisksPage: React.FC = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.05 }}
-                                className={`border rounded-lg overflow-hidden transition-all ${risk.is_resolved ? 'opacity-60 bg-[var(--depth-1)] border-[var(--border-subtle)]' : 'bg-[var(--depth-1)] border-[var(--border-default)]'
+                                className={`border rounded-lg overflow-hidden transition-all ${risk.resolved ? 'opacity-60 bg-[var(--depth-1)] border-[var(--border-subtle)]' : 'bg-[var(--depth-1)] border-[var(--border-default)]'
                                     }`}
                             >
                                 {/* Header */}
@@ -206,13 +197,13 @@ export const RisksPage: React.FC = () => {
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <h3 className={`text-sm font-medium ${risk.is_resolved ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'}`}>
+                                            <h3 className={`text-sm font-medium ${risk.resolved ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'}`}>
                                                 {risk.title}
                                             </h3>
-                                            {risk.is_resolved && (
+                                            {risk.resolved && (
                                                 <span className="badge badge-green">Resolved</span>
                                             )}
-                                            {!risk.is_resolved && risk.is_acknowledged && (
+                                            {!risk.resolved && risk.acknowledged && (
                                                 <span className="badge">Acknowledged</span>
                                             )}
                                         </div>
@@ -225,7 +216,7 @@ export const RisksPage: React.FC = () => {
                                             <p className="text-xs font-medium text-[var(--text-secondary)]">{risk.effort_estimate}</p>
                                         </div>
 
-                                        {!risk.is_resolved && !risk.is_acknowledged && (
+                                        {!risk.resolved && !risk.acknowledged && (
                                             <Button variant="ghost" size="sm" onClick={(e) => handleAcknowledge(risk.id, e)}>
                                                 Acknowledge
                                             </Button>
@@ -282,7 +273,7 @@ export const RisksPage: React.FC = () => {
                                                     </div>
                                                 )}
 
-                                                {!risk.is_resolved && (
+                                                {!risk.resolved && (
                                                     <div className="flex justify-end pt-2 border-t border-[var(--border-subtle)]">
                                                         {resolvingId === risk.id ? (
                                                             <div className="flex-1 flex gap-2 items-end">

@@ -2,7 +2,7 @@
 // API client for KnowFlow backend at http://localhost:8000
 
 // Use relative path - handling is done by Vite Proxy (Dev) or Nginx (Prod)
-const API_BASE = '/api/v1';
+const API_BASE = import.meta.env.VITE_API_BASE || '/api/v1';
 
 interface ApiResponse<T> {
     data: T | null;

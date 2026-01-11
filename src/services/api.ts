@@ -61,8 +61,13 @@ export interface CreateProcessRequest {
     department?: string | null;
 }
 
+export interface ProcessListResponse {
+    processes: Process[];
+    total: number;
+}
+
 export const processesApi = {
-    list: () => request<Process[]>('GET', '/processes'),
+    list: () => request<ProcessListResponse>('GET', '/processes'),
     get: (id: string) => request<Process>('GET', `/processes/${id}`),
     create: (data: CreateProcessRequest) => request<Process>('POST', '/processes', data),
     update: (id: string, data: Partial<CreateProcessRequest>) =>

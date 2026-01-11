@@ -38,10 +38,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setIsLoading(true);
         const result = await processesApi.list();
         if (result.data) {
-            setProcesses(result.data);
+            setProcesses(result.data.processes);
             // Auto-select first process if none selected
-            if (!currentProcess && result.data.length > 0) {
-                setCurrentProcess(result.data[0]);
+            if (!currentProcess && result.data.processes.length > 0) {
+                setCurrentProcess(result.data.processes[0]);
             }
         } else {
             setError(result.error);
